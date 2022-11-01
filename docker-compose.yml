@@ -9,3 +9,8 @@ services:
       - /app/node_modules
     environment:
       - PORT=3000
+  
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: qwerty
