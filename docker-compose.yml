@@ -14,3 +14,14 @@ services:
     image: postgres
     environment:
       POSTGRES_PASSWORD: qwerty
+  
+  pgbouncer:
+    image: pgbouncer/pgbouncer:1.12.0
+    restart: always
+    ports:
+      - 6432:6432
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
