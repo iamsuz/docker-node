@@ -4,25 +4,22 @@ let logger = require('morgan');
 const app = express()
 const bodyParser = require('body-parser')
 const session = require('cookie-session')
+let fileUpload = require('express-fileupload');
 // Add a routers
 
-app.use(session({secret: process.env.SECRET}))
-    .use(function(req,res,next){
-        next()
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// for file uploads
+app.use(
+    fileUpload({
+      // useTempFiles: true,
+      // tempFileDir: '/tmp/',
+      debug: true,
     })
-    .get('/todo', function(req,res){
-        res.render('todo.ejs',{todolist: req.session.todolist})
-    })
-    .post('/todo/add',function(req,res){
-        if(req.body.newtodo != ''){
-            req.session.todolist.push(req.body.newtodo)
-        }
-        res.redirect('/todo')
-    })
-    .use(function(req,res,next){
-        res.redirect('/todo')
-    })
-    
+  );
+
 app.get('/',(req,res)=>{
     res.send("<h2>Hello There adsufh  !!</h2>")
 })
@@ -31,6 +28,7 @@ app.get('/',(req,res)=>{
 
 app.use(logger(`:remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :: (time: :response-time ms)`));
 
+app.use('/api', router);
 
 const port = process.env.PORT || 3000
 
