@@ -40,6 +40,8 @@ const withBlender = async (req, res) => {
    fs.writeFileSync(tempFilePath, zprjFileContent);
 
   // Define the command to execute the Blender Python script
+  //if you have blender defined in your PATH variable then you can use
+  // blender --background --python script.py --filename
   const command = `/Applications/Blender.app/Contents/MacOS/Blender --background --python script.py -- ${tempFilePath}`;
 
   // Execute the command
