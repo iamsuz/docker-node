@@ -3,25 +3,27 @@ const toGltf= require('../functions/fbxToGltf')
 const convert = require('fbx2gltf');
 const fs = require('fs')
 const { exec } = require('child_process');
-const { objToGlb } = require('../functions/objToGltf');
+const { objToGlb, objToGltf } = require('../functions/objToGltf');
 
 const convertFBXToGLTF = async (req,res) =>{
     try {
-        // console.log(req.files.fbxFile)
+        console.log(req.files.fbxFile)
         console.log('Inside a converter')
            // Write the file content to a temporary file
-        const tempFilePath = './temp.zprj';
+        const tempFilePath = './temp.fbx';
         fs.writeFileSync(tempFilePath, req.files.fbxFile.data);
         // await toGltf(req.files.fbxFile)
-        // const uint8Array = new Uint8Array(req.files.fbxFile.data);
-        convert('./controller/toConvert.fbx','asg.glb', ['-d', '--khr-materials-unlit']).then(
+        const uint8Array = new Uint8Array(req.files.fbxFile);
+        let file
+        convert(uint8Array,'asg.glb', ['-d', '--khr-materials-unlit']).then(
             d=>{
-                console.log(d)
+                console.log({d})
+                file = d
             }
         )
         // fs.writeFile('test.glb', gldFile) 
         // console.log({gldFile})
-        // return res.status(200).json({gldFile})
+        return res.status(200).json({file: 'asg.glb'})
     } catch (error) {
         console.error(error)
     }
